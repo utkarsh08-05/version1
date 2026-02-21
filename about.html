@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | Astra</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #030406;
+    --accent: #d4b99b;
+    --border: rgba(255,255,255,0.05);
+    --text-soft: rgba(255,255,255,0.65);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    background: var(--bg);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Navigation */
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 40px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+    background: rgba(3,4,6,0.85);
+    backdrop-filter: blur(8px);
+}
+
+.logo {
+    font-family: 'Cormorant Garamond';
+    letter-spacing: 5px;
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav-home {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent);
+    transition: 0.3s;
+}
+
+.nav-home:hover {
+    text-shadow: 0 0 15px rgba(212, 185, 155, 0.5);
+}
+
+.section-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    opacity: 0.5;
+}
+
+/* Hero */
+
+.hero {
+    padding: 180px 10% 120px 10%;
+    max-width: 1200px;
+}
+
+.hero span {
+    color: var(--accent);
+    font-size: 0.65rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2rem;
+}
+
+.hero h1 {
+    font-family: 'Cormorant Garamond';
+    font-weight: 300;
+    font-size: 4.5rem;
+    line-height: 1;
+}
+
+.hero h1 i {
+    font-style: italic;
+}
+
+/* Content Sections */
+
+.content-section {
+    padding: 120px 10%;
+    border-top: 1px solid var(--border);
+    max-width: 1200px;
+}
+
+.content-section h2 {
+    font-family: 'Cormorant Garamond';
+    font-weight: 300;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: var(--accent);
+}
+
+.content-section p {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    font-weight: 200;
+    color: var(--text-soft);
+    max-width: 800px;
+}
+
+/* Quote Section */
+
+.quote {
+    padding: 140px 10%;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+
+.quote p {
+    font-family: 'Cormorant Garamond';
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    max-width: 900px;
+    margin: auto;
+    color: white;
+    line-height: 1.5;
+}
+
+/* Footer */
+
+footer {
+    padding: 80px 10%;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.4;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="home.html" class="logo">ASTRA</a>
+    <div class="section-label">02 // ABOUT</div>
+    <a href="home.html" class="nav-home">← Back to Home</a>
+</nav>
+
+<section class="hero">
+    <span>Our Foundation</span>
+    <h1>The <i>Intelligence</i><br>Behind Astra.</h1>
+</section>
+
+<section class="content-section">
+    <h2>Precision Over Prediction</h2>
+    <p>
+        Astra was founded on a single principle: astrology is not superstition — it is structure. 
+        We interpret celestial movement not as destiny, but as symbolic architecture. 
+        Every planetary alignment is a pattern. Every pattern reveals perspective.
+        Our work focuses on interpretation, clarity, and strategic awareness rather than deterministic claims.
+    </p>
+</section>
+
+<section class="content-section">
+    <h2>Modern Computation</h2>
+    <p>
+        By merging ancient astronomical observation with contemporary computational modeling, 
+        Astra translates symbolic systems into structured insight. 
+        We believe knowledge must be elegant, restrained, and responsibly delivered. 
+        The future is not predicted — it is navigated.
+    </p>
+</section>
+
+<section class="content-section">
+    <h2>Ethical Intelligence</h2>
+    <p>
+        Our methodology respects privacy, consent, and intellectual transparency. 
+        We provide general interpretative frameworks designed to enhance reflection and awareness. 
+        Personal forecasts are never automated; deeper analysis remains within structured professional consultation.
+    </p>
+</section>
+
+<section class="quote">
+    <p>
+        “In a world obsessed with certainty, we provide orientation.”
+    </p>
+</section>
+
+<footer>
+    © Astra Studio — Structured Astrological Intelligence
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRA | Deep Space</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@100;300;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #d4b99b; --accent-dark: #a88970; --dim: rgba(255, 255, 255, 0.1); --border: rgba(212, 185, 155, 0.3); --glow: rgba(212, 185, 155, 0.4); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #010103; color: white; font-family: 'Inter', sans-serif; overflow-y: auto; transition: background 8s ease-in-out; }
+        #canvas-container { position: fixed; inset: 0; z-index: 1; }
+        
+        /* Premium Glassmorphic Navbar */
+        nav { 
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6%;
+    z-index: 1000;
+
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    border-bottom: none;
+    box-shadow: none;
+}
+        .logo { 
+            font-family: 'Cormorant Garamond'; font-size: 1.5rem; letter-spacing: 1.2em; color: var(--accent); text-decoration: none; 
+            transition: 0.4s cubic-bezier(0.343, 2.56, 0.64, 1);
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+        .logo:hover { 
+            text-shadow: 0 0 30px rgba(212, 185, 155, 0.6), 0 0 60px rgba(212, 185, 155, 0.3);
+            letter-spacing: 1.1em;
+            transform: scale(1.15);
+        }
+        
+        /* Premium Nav Center Items */
+        .nav-center { display: flex; gap: 50px; align-items: center; }
+        .nav-center a { 
+            font-size: 0.7rem; letter-spacing: 0.25em; color: rgba(255, 255, 255, 0.75); text-decoration: none; 
+            text-transform: uppercase; 
+            transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
+        }
+        .nav-center a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .nav-center a:hover { 
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(212, 185, 155, 0.5);
+            transform: translateY(-2px);
+        }
+        .nav-center a:hover::after {
+            width: 100%;
+        }
+        
+        /* Premium Profile Dropdown */
+        .profile-menu { position: relative; }
+        .profile-btn { 
+            font-size: 0.7rem; letter-spacing: 0.2em; color: rgba(255, 255, 255, 0.8); 
+            background: linear-gradient(135deg, rgba(212, 185, 155, 0.04) 0%, rgba(212, 185, 155, 0.01) 100%);
+            border: 1px solid rgba(212, 185, 155, 0.15);
+            padding: 10px 18px;
+            cursor: pointer; 
+            border-radius: 8px; 
+            transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }
+        .profile-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 185, 155, 0.15), transparent);
+            transition: left 0.6s;
+        }
+        .profile-btn:hover::before {
+            left: 100%;
+        }
+        .profile-btn:hover { 
+            color: var(--accent);
+            border-color: rgba(212, 185, 155, 0.3);
+            background: linear-gradient(135deg, rgba(212, 185, 155, 0.08) 0%, rgba(212, 185, 155, 0.03) 100%);
+            box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+        .profile-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Premium Dropdown */
+        .dropdown { 
+            position: absolute; top: 70px; right: 0; 
+            background: linear-gradient(135deg, rgba(1, 1, 3, 0.08) 0%, rgba(1, 1, 3, 0.04) 100%);
+            border: 1px solid rgba(212, 185, 155, 0.12);
+            border-radius: 12px;
+            min-width: 180px;
+            backdrop-filter: blur(50px) saturate(120%);
+            -webkit-backdrop-filter: blur(50px) saturate(120%);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.04);
+            animation: slideDown 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .dropdown.active { display: flex; }
+        .dropdown a { 
+            padding: 14px 18px; 
+            font-size: 0.68rem; 
+            letter-spacing: 0.15em; 
+            color: rgba(255, 255, 255, 0.75); 
+            text-decoration: none; 
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(212, 185, 155, 0.08);
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 500;
+            position: relative;
+        }
+        .dropdown a:last-child { border-bottom: none; }
+        .dropdown a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent), transparent);
+            transform: scaleY(0);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .dropdown a:hover { 
+            background: linear-gradient(90deg, rgba(212, 185, 155, 0.08) 0%, transparent 100%);
+            color: var(--accent);
+            text-shadow: 0 0 12px rgba(212, 185, 155, 0.3);
+            padding-left: 24px;
+        }
+        .dropdown a:hover::before {
+            transform: scaleY(1);
+        }
+        
+        /* Floating Chat Button */
+        .floating-chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 90%;
+            background: linear-gradient(235deg, var(--accent), var(--accent-dark));
+            border: 2px solid rgba(212, 185, 155, 0.3);
+            color: #1717c9;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 32px rgba(212, 185, 155, 0.25), inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .floating-chat-btn:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 12px 40px rgba(212, 185, 155, 0.35), inset 1px 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        .floating-chat-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Chatbot Window */
+        .chatbot-window {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 420px;
+            height: 600px;
+            background: transparent;
+            border: 1px solid rgba(212, 185, 155, 0.03);
+            border-radius: 16px;
+            box-shadow: none;
+            backdrop-filter: blur(20px) saturate(100%);
+            -webkit-backdrop-filter: blur(20px) saturate(100%);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .chatbot-window.active {
+            display: flex;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chatbot-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(212, 185, 155, 0.05);
+            font-family: 'Cormorant Garamond';
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+        }
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .chatbot-close:hover {
+            color: var(--accent);
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chatbot-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            max-width: 85%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chatbot-message.user {
+            align-self: flex-end;
+            background: transparent;
+            color: #cbf5f8;
+            border-radius: 12px 4px 12px 12px;
+            font-weight: 500;
+        }
+        .chatbot-message.bot {
+            align-self: flex-start;
+            background: transparent;
+            border: 1px solid rgba(212, 185, 155, 0.1);
+            color: rgba(248, 187, 163, 0.85);
+            border-radius: 4px 12px 12px 12px;
+        }
+        .chatbot-message.typing {
+            background: transparent;
+            border: 1px solid rgba(212, 185, 155, 0.08);
+            color: rgba(212, 185, 155, 0.6);
+        }
+        
+        .chatbot-input-area {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-top: 1px solid rgba(212, 185, 155, 0.05);
+            background: transparent;}
+        .chatbot-input-area input {
+            flex: 1;
+            background: transparent;
+            border: 1px solid rgba(212, 185, 155, 0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: white;
+            font-size: 0.85rem;
+            outline: none;
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Inter', sans-serif;
+            backdrop-filter: blur(15px);
+        }
+        .chatbot-input-area input:focus {
+            background:transparent;
+            border-color: rgba(212, 185, 155, 0.2);
+            box-shadow: 0 0 10px rgba(212, 185, 155, 0.05);
+        }
+        .chatbot-input-area input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .chatbot-send-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border: none;
+            color: #010103;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(212, 185, 155, 0.2);
+        }
+        .chatbot-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 185, 155, 0.35);
+        }
+        .chatbot-send-btn:active {
+            transform: translateY(0);
+        }
+        .chatbot-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Scrollbar styling */
+        .chatbot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(212, 185, 155, 0.2);
+            border-radius: 3px;
+        }
+        .chatbot-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 185, 155, 0.4);
+        }
+        
+        .hero { position: relative; height: 100vh; display: flex; align-items: center; padding-left: 10%; z-index: 10; pointer-events: none; }
+        .hero h1 { font-family: 'Cormorant Garamond'; font-size: 5rem; font-weight: 300; line-height: 1.1; }
+        
+        /* Premium Glassmorphic Footer */
+        /* ===== Relaxed Cinematic Footer ===== */
+.astra-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 35px 6%;
+    z-index: 20;
+
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    border-top: none;
+}
+
+/* Softer 4-column layout */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 40px;
+}
+
+/* Reduce visual weight */
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-logo {
+    font-family: 'Cormorant Garamond';
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 300;
+}
+
+.footer-description {
+    font-size: 0.68rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.55);
+    max-width: 260px;
+}
+
+.footer-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(212, 185, 155, 0.7);
+    margin-bottom: 6px;
+}
+
+.footer-col a {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: 0.25s ease;
+}
+
+.footer-col a:hover {
+    color: var(--accent);
+}
+
+/* Bottom bar lighter & calmer */
+.footer-bottom {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(212, 185, 155, 0.05);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+}
+
+.footer-bottom .status span {
+    color: rgba(212, 185, 155, 0.8);
+}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">ASTRA</a>
+        
+        <div class="nav-center">
+            <a href="#">Home</a>
+            <a href="#">Explore</a>
+            <a href="#">Store</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        
+        <div class="profile-menu">
+            <button class="profile-btn" id="profile-toggle">👤 Profile</button>
+            <div class="dropdown" id="profile-dropdown">
+                <a href="#" onclick="alert('Login feature')">Login</a>
+                <a href="#" onclick="alert('Logout feature')">Logout</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Floating Chat Toggle Button -->
+    <button class="floating-chat-btn" id="chat-toggle">💬</button>
+    
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header">
+            <span>Astra Intelligence</span>
+            <button class="chatbot-close" id="chat-close">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages"></div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbot-input" placeholder="Ask about the cosmos..." />
+            <button class="chatbot-send-btn" id="chatbot-send">Send</button>
+        </div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <main class="hero">
+        <div>
+            <p style="font-size: 0.5rem; letter-spacing: 0.6em; color: var(--accent); margin-bottom: 20px;">SECTOR_04 // DEEP_FIELD</p>
+            <h1>Astral<span><i>Precision</i>.</span></h1>
+        </div>
+    </main>
+
+   <footer class="astra-footer">
+
+    <div class="footer-grid">
+
+        <!-- Brand Column -->
+        <div class="footer-col brand">
+            <div class="footer-logo">ASTRA</div>
+            <p class="footer-description">
+                Precision celestial intelligence platform delivering advanced
+                astrological analytics, deep-space visualization and cosmic insights.
+            </p>
+        </div>
+
+        <!-- Platform -->
+        <div class="footer-col">
+            <div class="footer-title">Platform</div>
+            <a href="#">Dashboard</a>
+            <a href="#">Store</a>
+            <a href="#">Explore</a>
+            <a href="#">Live Readings</a>
+        </div>
+
+        <!-- Company -->
+        <div class="footer-col">
+            <div class="footer-title">Company</div>
+            <a href="#">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Press</a>
+            <a href="#">Contact</a>
+        </div>
+
+        <!-- Legal -->
+        <div class="footer-col">
+            <div class="footer-title">Legal</div>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Security</a>
+            <a href="#">Support</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <div>© 2026 ASTRA OBSERVATORY. All rights reserved.</div>
+        <div class="status">
+            Rendering Engine: <span>ACTIVE</span> • Deep Field Mode: <span>ENABLED</span>
+        </div>
+    </div>
+
+</footer>
+    <script>
+        let scene, camera, renderer, saturn, rings, stars, atmosphere;
+        let mouseX = 0, mouseY = 0;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 2000);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true; // Enable shadows
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            // 1. SATURN BODY (Enhanced Texture)
+            const sCanvas = document.createElement('canvas');
+            sCanvas.width = 1024; sCanvas.height = 512;
+            const sCtx = sCanvas.getContext('2d');
+            for(let i=0; i<512; i++) {
+                const b = 20 + Math.sin(i * 0.08) * 12 + Math.random() * 6;
+                sCtx.fillStyle = `rgb(${b+18}, ${b+10}, ${b+5})`;
+                sCtx.fillRect(0, i, 1024, 1);
+            }
+            const saturnTex = new THREE.CanvasTexture(sCanvas);
+            saturn = new THREE.Mesh(
+                new THREE.SphereGeometry(0.85, 128, 128), 
+                new THREE.MeshStandardMaterial({ map: saturnTex, roughness: 1.9, metalness: 0.1 })
+            );
+            saturn.castShadow = true;
+            saturn.receiveShadow = true;
+            // tilt Saturn forward toward the viewer
+            saturn.rotation.z = -0.18; // ~16 degrees forward tilt
+            scene.add(saturn);
+
+            // 2. ATMOSPHERE (Fresnel Glow)
+            atmosphere = new THREE.Mesh(
+                new THREE.SphereGeometry(0.88, 228, 228),
+                new THREE.MeshBasicMaterial({ 
+                    color: 0x99ccff, 
+                    transparent: true, 
+                    opacity: 0.1, 
+                    side: THREE.BackSide 
+                })
+            );
+            scene.add(atmosphere);
+
+            // 3. REALISTIC RINGS (Shadow-receiving)
+            const rCanvas = document.createElement('canvas');
+            rCanvas.width = 1024; rCanvas.height = 2;
+            const rCtx = rCanvas.getContext('2d');
+            for(let i=0; i<1024; i++) {
+                const d = Math.abs(i - 512);
+                const gap = (d > 140 && d < 160) ? 0 : 1; 
+                rCtx.fillStyle = `rgba(212, 185, 155, ${(Math.random() * 0.7) * gap})`;
+                rCtx.fillRect(i, 0, 1, 1);
+            }
+            const ringTex = new THREE.CanvasTexture(rCanvas);
+            rings = new THREE.Mesh(
+                new THREE.RingGeometry(1.2, 2.3, 128), 
+                new THREE.MeshStandardMaterial({ 
+                    map: ringTex, 
+                    transparent: true, 
+                    side: THREE.DoubleSide, 
+                    opacity: 0.85,
+                    roughness: 4.0,
+                    emissive: 0xf2d3a9,
+                    emissiveIntensity: 0.65
+                })
+            );
+            rings.rotation.x = Math.PI / 2.2;
+            // match Saturn's forward tilt on the rings for consistency
+            rings.rotation.z = -0.28;
+            rings.receiveShadow = true; // Crucial for realism
+            scene.add(rings);
+
+            // 4. STAR DUST
+            const starGeo = new THREE.BufferGeometry();
+            const starCoords = new Float32Array(9000 * 3);
+            for(let i=0; i<27000; i++) starCoords[i] = (Math.random() - 0.5) * 60;
+            starGeo.setAttribute('position', new THREE.BufferAttribute(starCoords, 3));
+            
+            // Create circular star texture
+            const starCanvas = document.createElement('canvas');
+            starCanvas.width = 64;
+            starCanvas.height = 64;
+            const starCtx = starCanvas.getContext('2d');
+            const gradient = starCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.4)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            starCtx.fillStyle = gradient;
+            starCtx.fillRect(0, 0, 64, 64);
+            const starTex = new THREE.CanvasTexture(starCanvas);
+            
+            stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.380, color: 0xffffff, transparent: true, opacity: 0.7, map: starTex, sizeAttenuation: true }));
+            scene.add(stars);
+
+            // 5. LIGHTING (Sunlight + Shadow Source)
+            const sun = new THREE.DirectionalLight(0xffffff, 5);
+            sun.position.set(6, 4, 8);
+            sun.castShadow = true;
+            // High quality shadows
+            sun.shadow.mapSize.width = 2048;
+            sun.shadow.mapSize.height = 2048;
+            sun.shadow.camera.near = 0.5;
+            sun.shadow.camera.far = 100;
+            scene.add(sun);
+
+            const fillLight = new THREE.HemisphereLight(0x4433aa, 0x000000, 1);
+            scene.add(fillLight);
+
+            camera.position.z = 12;
+            camera.position.x = 3.5; 
+        }
+
+        const spaceColors = ['#010103', '#050714', '#0d0510', '#051111', '#140c05'];
+        let colorIdx = 0;
+        setInterval(() => {
+            colorIdx = (colorIdx + 1) % spaceColors.length;
+            document.body.style.backgroundColor = spaceColors[colorIdx];
+        }, 10000);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            saturn.rotation.y += 0.0012;
+            rings.rotation.z -= 0.001;
+
+            camera.position.x += (3.5 + (mouseX * 0.4) - camera.position.x) * 0.05;
+            camera.position.y += ((-mouseY * 0.4) - camera.position.y) * 0.05;
+            camera.lookAt(-3.15, 0, 0);
+
+            stars.material.opacity = 0.2 + Math.abs(Math.sin(Date.now() * 0.0007)) * 0.5;
+            renderer.render(scene, camera);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 1.5;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 1.5;
+        });
+
+        init();
+        animate();
+
+        // Profile Dropdown Toggle
+        const profileToggle = document.getElementById('profile-toggle');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        
+        profileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // ===== CHATBOT FUNCTIONALITY =====
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatClose = document.getElementById('chat-close');
+        const chatInput = document.getElementById('chatbot-input');
+        const chatSend = document.getElementById('chatbot-send');
+        const chatMessages = document.getElementById('chatbot-messages');
+
+        // Toggle chatbot window
+        chatToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatbotWindow.classList.toggle('active');
+            if (chatbotWindow.classList.contains('active')) {
+                chatInput.focus();
+                // Load chat history from localStorage
+                loadChatHistory();
+            }
+        });
+
+        // Close chatbot
+        chatClose.addEventListener('click', () => {
+            chatbotWindow.classList.remove('active');
+        });
+
+        // Load chat history from localStorage
+        function loadChatHistory() {
+            const history = JSON.parse(localStorage.getItem('astraChatHistory') || '[]');
+            chatMessages.innerHTML = '';
+            history.forEach(msg => {
+                addMessageToUI(msg.text, msg.sender);
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Save message to localStorage
+        function saveChatMessage(text, sender) {
+            const history = JSON.parse(localStorage.getItem('astraChatHistory') || '[]');
+            history.push({ text, sender, timestamp: new Date().toISOString() });
+            localStorage.setItem('astraChatHistory', JSON.stringify(history));
+        }
+
+        // Add message to UI
+        function addMessageToUI(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chatbot-message ${sender}`;
+            msgDiv.textContent = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Send message to server
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Disable send button and clear input
+            chatSend.disabled = true;
+            chatInput.value = '';
+            chatInput.disabled = true;
+
+            // Add user message to UI
+            addMessageToUI(message, 'user');
+            saveChatMessage(message, 'user');
+
+            // Show typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chatbot-message typing';
+            typingDiv.textContent = 'ASTRA is processing...';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                // Send message to server.js
+                const response = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
+                });
+
+                const data = await response.json();
+
+                // Remove typing indicator
+                typingDiv.remove();
+
+                if (response.ok) {
+                    const reply = data.reply;
+                    addMessageToUI(reply, 'bot');
+                    saveChatMessage(reply, 'bot');
+                } else {
+                    addMessageToUI('Connection to ASTRA failed. Please ensure the server is running.', 'bot');
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+                typingDiv.remove();
+                addMessageToUI('Unable to reach the cosmic network. Server may be offline.', 'bot');
+            }
+
+            // Re-enable input
+            chatSend.disabled = false;
+            chatInput.disabled = false;
+            chatInput.focus();
+        }
+
+        // Send button click
+        chatSend.addEventListener('click', sendMessage);
+
+        // Enter key to send
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !chatSend.disabled) {
+                sendMessage();
+            }
+        });
+
+        // Close chatbot when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!chatbotWindow.contains(e.target) && e.target !== chatToggle) {
+                chatbotWindow.classList.remove('active');
+            }
+        });
+
+        // Load initial chat history
+        loadChatHistory();
+    </script>
+</body>
+</html>
