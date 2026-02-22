@@ -1,277 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Astra</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Astra</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@200;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@200;400&display=swap" rel="stylesheet">
 
-    <style>
-        :root { 
-            --bg: #030406; 
-            --accent: #d4b99b; 
-            --border: rgba(255, 255, 255, 0.08); 
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body { 
-            background: var(--bg); 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            height: 100vh; 
-            overflow: hidden;
-        }
-
-        /* Background Video */
-        .bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -2;
-        }
-
-        /* Dark Overlay */
-        .video-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(3, 4, 6, 0.75);
-    z-index: -1;
-    pointer-events: none;   /* 🔥 THIS FIXES IT */
+<style>
+:root { 
+    --bg: #030406; 
+    --accent: #d4b99b; 
+    --border: rgba(255,255,255,0.08); 
 }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    background: var(--bg);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+/* ================= VIDEO BACKGROUND ================= */
+
 .bg-video {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    object-fit: cover;
+    z-index: -2;
     pointer-events: none;
 }
-        nav { 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            padding: 40px 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid var(--border);
-            z-index: 10;
-        }
 
-        .logo { 
-            font-family: 'Cormorant Garamond', serif; 
-            letter-spacing: 5px; 
-            font-size: 1.4rem; 
-            color: #fff; 
-            text-decoration: none; 
-        }
-        
-        .nav-home { 
-            font-size: 0.75rem; 
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-            text-decoration: none; 
-            color: var(--accent); 
-            transition: 0.3s; 
-        }
+.video-overlay {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(3,4,6,0.75);
+    z-index: -1;
+    pointer-events: none;
+}
 
-        .nav-home:hover { 
-            text-shadow: 0 0 15px rgba(212, 185, 155, 0.5); 
-        }
+/* ================= NAV ================= */
 
-        /* Main Content */
-        .page-wrapper { 
-            display: flex; 
-            height: 100vh; 
-            align-items: center; 
-            padding: 0 10%;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .contact-info { width: 50%; }
+nav {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:40px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    z-index:1000;
+}
 
-        .label { 
-            color: var(--accent); 
-            font-size: 0.65rem; 
-            letter-spacing: 6px; 
-            text-transform: uppercase; 
-            margin-bottom: 3rem; 
-            display: block; 
-        }
-        
-        .info-row { margin-bottom: 4rem; }
+.logo {
+    font-family:'Cormorant Garamond', serif;
+    letter-spacing:5px;
+    font-size:1.4rem;
+    color:#fff;
+    text-decoration:none;
+}
 
-        .info-row span { 
-            font-size: 0.7rem; 
-            color: rgba(255,255,255,0.3); 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            display: block; 
-            margin-bottom: 10px; 
-        }
+.nav-home {
+    font-size:0.75rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--accent);
+    transition:0.3s ease;
+}
 
-        .info-row h3 { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-size: 2.5rem; 
-            font-weight: 300; 
-        }
+.nav-home:hover {
+    color:#fff;
+    text-shadow:
+        0 0 8px rgba(212,185,155,0.8),
+        0 0 18px rgba(212,185,155,0.6);
+}
 
-        .cta-container { 
-            width: 50%; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: flex-end; 
-        }
-        
-        /* Button */
-        .protocol-btn {
-            background: none; 
-            border: 1px solid var(--accent); 
-            color: var(--accent);
-            padding: 2rem 4rem; 
-            font-size: 0.8rem; 
-            letter-spacing: 4px; 
-            text-transform: uppercase;
-            cursor: pointer; 
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        }
+/* ================= MAIN ================= */
 
-        .protocol-btn:hover { 
-            background: var(--accent); 
-            color: #000; 
-            box-shadow: 0 0 50px rgba(212, 185, 155, 0.2); 
-        }
+.page-wrapper {
+    display:flex;
+    min-height:100vh;
+    align-items:center;
+    padding:0 10%;
+}
 
-        /* Slide-out Form */
-        .form-panel {
-            position: fixed; 
-            top: 0; 
-            right: -500px; 
-            width: 500px; 
-            height: 100%;
-            background: #0a0c0e; 
-            border-left: 1px solid var(--border);
-            z-index: 200; 
-            padding: 100px 60px; 
-            transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-        }
+.contact-info { width:50%; }
 
-        .form-panel.open { right: 0; }
-        
-        .form-panel h2 { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-size: 3rem; 
-            margin-bottom: 3rem; 
-        }
+.label {
+    color:var(--accent);
+    font-size:0.65rem;
+    letter-spacing:6px;
+    text-transform:uppercase;
+    margin-bottom:3rem;
+    display:block;
+}
 
-        .field { margin-bottom: 2rem; }
+.info-row { margin-bottom:4rem; }
 
-        .field label { 
-            font-size: 0.6rem; 
-            color: var(--accent); 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-        }
+.info-row span {
+    font-size:0.7rem;
+    color:rgba(255,255,255,0.3);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    display:block;
+    margin-bottom:10px;
+}
 
-        .field input, .field textarea {
-            width: 100%; 
-            background: none; 
-            border: none; 
-            border-bottom: 1px solid var(--border);
-            padding: 15px 0; 
-            color: white; 
-            outline: none; 
-            transition: 0.3s;
-        }
+.info-row h3 {
+    font-family:'Cormorant Garamond', serif;
+    font-size:2.5rem;
+    font-weight:300;
+}
 
-        .field input:focus, 
-        .field textarea:focus { 
-            border-color: var(--accent); 
-        }
+.cta-container {
+    width:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+}
 
-    </style>
+/* ================= BUTTON ================= */
+
+.protocol-btn {
+    background:none;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    padding:2rem 4rem;
+    font-size:0.8rem;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:0.4s ease;
+}
+
+.protocol-btn:hover {
+    background:var(--accent);
+    color:#000;
+    box-shadow:0 0 40px rgba(212,185,155,0.2);
+}
+
+/* ================= FORM PANEL ================= */
+
+.form-panel {
+    position:fixed;
+    top:0;
+    right:-500px;
+    width:500px;
+    height:100%;
+    background:#0a0c0e;
+    border-left:1px solid var(--border);
+    padding:100px 60px;
+    transition:0.8s cubic-bezier(0.19,1,0.22,1);
+    z-index:2000;
+}
+
+.form-panel.open { right:0; }
+
+.form-panel h2 {
+    font-family:'Cormorant Garamond', serif;
+    font-size:3rem;
+    margin-bottom:3rem;
+}
+
+.field { margin-bottom:2rem; }
+
+.field label {
+    font-size:0.6rem;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.field input,
+.field textarea {
+    width:100%;
+    background:none;
+    border:none;
+    border-bottom:1px solid var(--border);
+    padding:15px 0;
+    color:white;
+    outline:none;
+    transition:0.3s;
+}
+
+.field input:focus,
+.field textarea:focus {
+    border-color:var(--accent);
+}
+
+</style>
 </head>
 
 <body>
 
-    <!-- Background Video -->
-    <video autoplay muted loop playsinline class="bg-video">
-        <source src="videoplayback.mp4" type="video/mp4">
-    </video>
+<!-- VIDEO -->
+<video autoplay muted loop playsinline class="bg-video">
+    <source src="videoplayback.mp4" type="video/mp4">
+</video>
 
-    <!-- Overlay -->
-    <div class="video-overlay"></div>
+<div class="video-overlay"></div>
 
-    <nav>
-        <a href="index.html" class="logo">ASTRA</a>
-        <a href="index.html" class="nav-home">← Back to Home</a>
-    </nav>
+<!-- NAV -->
+<nav>
+    <a href="./index.html" class="logo">ASTRA</a>
+    <a href="./index.html" class="nav-home">← Back to Home</a>
+</nav>
 
-    <main class="page-wrapper">
-        <div class="contact-info">
-            <span class="label">Executive Office</span>
-            
-            <div class="info-row">
-                <span>Secure Voice</span>
-                <h3>+44 20 7946 0128</h3>
-            </div>
-
-            <div class="info-row">
-                <span>Digital Envoy</span>
-                <h3>concierge@astra.io</h3>
-            </div>
-
-            <div class="info-row">
-                <span>London Studio</span>
-                <h3>Mayfair, W1K 2HB</h3>
-            </div>
+<!-- CONTENT -->
+<main class="page-wrapper">
+    <div class="contact-info">
+        <span class="label">Executive Office</span>
+        
+        <div class="info-row">
+            <span>Secure Voice</span>
+            <h3>+44 20 7946 0128</h3>
         </div>
 
-        <div class="cta-container">
-            <button class="protocol-btn" onclick="toggleForm(true)">Initiate Protocol</button>
-            <p style="margin-top: 2rem; font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 2px;">
-                EST. 1998 // LONDON
-            </p>
-        </div>
-    </main>
-
-    <div id="formPanel" class="form-panel">
-        <span onclick="toggleForm(false)" 
-              style="position:absolute; top:40px; right:40px; cursor:pointer; color:var(--accent); letter-spacing:2px; font-size:0.7rem;">
-              CLOSE // ✕
-        </span>
-
-        <h2>Secure <br><i>Communication</i></h2>
-
-        <div class="field">
-            <label>Identity</label>
-            <input type="text" placeholder="Full Name">
+        <div class="info-row">
+            <span>Digital Envoy</span>
+            <h3>concierge@astra.io</h3>
         </div>
 
-        <div class="field">
-            <label>Endpoint</label>
-            <input type="email" placeholder="Email Address">
+        <div class="info-row">
+            <span>London Studio</span>
+            <h3>Mayfair, W1K 2HB</h3>
         </div>
-
-        <div class="field">
-            <label>Context</label>
-            <textarea rows="4" placeholder="Brief details regarding your alignment query..."></textarea>
-        </div>
-
-        <button class="protocol-btn" style="width:100%; padding: 1.2rem;">
-            Transmit
-        </button>
     </div>
 
-    <script>
-        function toggleForm(open) {
-            document.getElementById('formPanel').classList.toggle('open', open);
-        }
-    </script>
+    <div class="cta-container">
+        <button class="protocol-btn" onclick="toggleForm(true)">
+            Initiate Protocol
+        </button>
+        <p style="margin-top:2rem; font-size:0.7rem; color:rgba(255,255,255,0.4); letter-spacing:2px;">
+            EST. 1998 // LONDON
+        </p>
+    </div>
+</main>
+
+<!-- FORM -->
+<div id="formPanel" class="form-panel">
+    <span onclick="toggleForm(false)"
+          style="position:absolute; top:40px; right:40px; cursor:pointer; color:var(--accent); letter-spacing:2px; font-size:0.7rem;">
+        CLOSE // ✕
+    </span>
+
+    <h2>Secure <br><i>Communication</i></h2>
+
+    <div class="field">
+        <label>Identity</label>
+        <input type="text" placeholder="Full Name">
+    </div>
+
+    <div class="field">
+        <label>Endpoint</label>
+        <input type="email" placeholder="Email Address">
+    </div>
+
+    <div class="field">
+        <label>Context</label>
+        <textarea rows="4" placeholder="Brief details regarding your alignment query..."></textarea>
+    </div>
+
+    <button class="protocol-btn" style="width:100%; padding:1.2rem;">
+        Transmit
+    </button>
+</div>
+
+<script>
+function toggleForm(open) {
+    document.getElementById('formPanel').classList.toggle('open', open);
+}
+</script>
 
 </body>
 </html>
