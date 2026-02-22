@@ -7,21 +7,36 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
 
-<!-- <style>
+<style>
 :root {
-    --bg: #030406;
     --accent: #d4b99b;
-    --border: rgba(255,255,255,0.05);
-    --text-soft: rgba(255,255,255,0.65);
+    --border: rgba(255,255,255,0.08);
+    --text-soft: rgba(255,255,255,0.75);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-    background: var(--bg);
-    color: white;
     font-family: 'Inter', sans-serif;
+    color: white;
     overflow-x: hidden;
+    background: url("Galaxy.jpg.jpeg") no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+}
+
+/* Dark cinematic overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(3,4,6,0.85) 0%,
+        rgba(3,4,6,0.75) 40%,
+        rgba(3,4,6,0.95) 100%
+    );
+    z-index: -1;
 }
 
 /* Navigation */
@@ -34,9 +49,8 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
+    z-index: 10;
     border-bottom: 1px solid var(--border);
-    background: rgba(3,4,6,0.85);
     backdrop-filter: blur(8px);
 }
 
@@ -58,19 +72,19 @@ nav {
 }
 
 .nav-home:hover {
-    text-shadow: 0 0 15px rgba(212, 185, 155, 0.5);
+    text-shadow: 0 0 15px rgba(212, 185, 155, 0.6);
 }
 
 .section-label {
     font-size: 0.65rem;
     letter-spacing: 2px;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 /* Hero */
 
 .hero {
-    padding: 180px 10% 120px 10%;
+    padding: 220px 10% 120px 10%;
     max-width: 1200px;
 }
 
@@ -86,8 +100,8 @@ nav {
 .hero h1 {
     font-family: 'Cormorant Garamond';
     font-weight: 300;
-    font-size: 4.5rem;
-    line-height: 1;
+    font-size: 4.8rem;
+    line-height: 1.05;
 }
 
 .hero h1 i {
@@ -97,7 +111,7 @@ nav {
 /* Content Sections */
 
 .content-section {
-    padding: 120px 10%;
+    padding: 140px 10%;
     border-top: 1px solid var(--border);
     max-width: 1200px;
 }
@@ -105,15 +119,15 @@ nav {
 .content-section h2 {
     font-family: 'Cormorant Garamond';
     font-weight: 300;
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     margin-bottom: 2rem;
     color: var(--accent);
 }
 
 .content-section p {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     line-height: 1.9;
-    font-weight: 200;
+    font-weight: 300;
     color: var(--text-soft);
     max-width: 800px;
 }
@@ -121,36 +135,36 @@ nav {
 /* Quote Section */
 
 .quote {
-    padding: 140px 10%;
+    padding: 160px 10%;
     border-top: 1px solid var(--border);
     text-align: center;
 }
 
 .quote p {
     font-family: 'Cormorant Garamond';
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 300;
     font-style: italic;
     max-width: 900px;
     margin: auto;
     color: white;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 /* Footer */
 
 footer {
-    padding: 80px 10%;
+    padding: 100px 10%;
     border-top: 1px solid var(--border);
     font-size: 0.75rem;
     letter-spacing: 2px;
-    opacity: 0.4;
+    opacity: 0.5;
 }
-</style> -->
+</style>
 </head>
 
 <body>
-<img  src="Galaxy.jpg.jpeg" alt="">
+
 <nav>
     <a href="home.html" class="logo">ASTRA</a>
     <div class="section-label">02 // ABOUT</div>
